@@ -3,7 +3,7 @@ from django import forms
 
 # Create your models here.
 class Settings(models.Model):
-    kmallowence = models.IntegerField(max_length=3)     #30 cent
+    kmAllowence = models.IntegerField(max_length=3)     #30 cent
     dailyallowence = models.DecimalField()              #14 Euro
     fulldayallowence = models.DecimalField()            #28 Euro
     dailycompensation = models.DecimalField()           #80 Euro
