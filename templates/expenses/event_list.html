@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Spieltag{% endblock title %}
+
+{% block content %}
+
+{% if object_list.count > 0 %}
+  {% for game in object_list %}
+    <table border="0">
+      <tr>
+        <td width="75%"><h5><a href="{% url 'expenses:event_list' pk=chap.pk %}">{{ chap.name }}</a></h5></td>
+        <td width="15%"><h5>({{ chap.pairs.count }}/{{ chap.sum1 }}/{{ chap.sum2 }})</h5></td>
+
+        <td width="5%" align="right"><a  href="{% url 'chapters:chap_update' pk=chap.pk %}"><i aria-hidden class="fa fa-pencil"></i></a></td>
+        <td width="5%" align="right"><a  href="{% url 'chapters:chap_remove' pk=chap.pk %}"><i aria-hidden class="fa fa-trash-o" ></i></a></td>
+
+      </tr>
+
+    </table>
+  {% endfor %}
+{% else %}
+  <p>Noch keine Spieltage eingestellt!</p>
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h3>About Expenses</h3>
+  <br>
+  <p>Vielen Dank für die Nutzung von Expenses. Es erlaubt Referees die Erstellung, Änderung und Übermittlung der Reisekostenabrechung an den BGV.</p>
+  <br>
+  {% comment %}<p>Dazu ist der Abfragemodus mit Call Settings (L/R,r/s) auf</p>
+  <ul>
+  <li>Links (L)/Rechts (R)</li>
+  <li>zufällige Auswahl (r)/der Reihe nach (s)</li>
+  </ul>
+  <p>für jedes Kapitel separat einstellbar.</p>
+  <br>
+  <p>Mit Click auf Chapters werden alle Kapitel angezeigt. Die Angaben in Klammern rechts bedeuten:</p>
+  <p>(Anzahl aller Textpaare/bereits abgefragte Textpaare/davon nicht richtig beantwortet).</p>
+  <br>
+  <p>Die Abfrage wird nur innerhalb eine Kapitels gestartet und eingestellt.</p>
+  <ul>
+  <li>All (x): alle Textpaare werden berücksichtigt</li>
+  <li>Called (x): es werden nur die Textpaare abgefragt, die noch nicht abgefragt wurden.</li>
+  <li>Failed (x): es werden nur die Textpaare abgefragt, die falsch beantwortet wurden.</li>
+  <li>Reset: alle Textpaare werden auf "noch nicht abgefragt" gestellt; damit ist Called und All gleich der Anzahl der Textpaare und Failed=0</li>
+  </ul>
+  <p>Wenn die Zahl bei All und Called gleich ist und Failed (0), startet keine Anfrage.</p>
+  <p>Der Status der Textpaare (gewusst oder nicht) wird mit Häkchen und Minuszeichen innerhalb der Kapitelansicht dargestellt.</p>
+
+ <p>Innerhalb der Abfrage wird bei click auf Check gleich das nächste Textpaar abgefragt, falls die Antwort richtig war.</p>
+ <p>Sonst wird die Antwort und der richtige Text untereinandergestellt. Der User entscheidet dann, ob die Antwort richtig oder falsch ist.</p>
+ <p>"Leere Eingaben" sind nicht zulässig.</p>
+
+ <p>Die Abfrage und das Erstellen von Textpaaren wird mit Cancel beendet.</p>
+{% endcomment %}
+
+  <table>
+    {% for item in object_list %}
+      <tr>
+        <td> {{ item.expenses.author }}</td>
+        <td> {{ item.referee.lastname }}</td>
+        <td> {{ item.textL }}</td>
+        <td> {{ item.textR }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock content %}
