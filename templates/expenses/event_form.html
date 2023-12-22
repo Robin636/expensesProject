@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Neue Abrechnung{% endblock title %}
+
+{% block content %}
+
+{% if event.name %}
+    <h4>Abrechnungsnamen ändern:</h4>
+  {% else %}
+    <h4>Neue Abrechnung: {{ event.name }}</h4>
+  {% endif %}
+  <hr>
+
+  <form method="POST">{% csrf_token %}
+    <table>
+      {% for field in form %}
+
+        <tr height="40px">
+          <td>{{ field.label }}</td>
+          <td>{{ field }}</td>
+        </tr>
+      {% endfor %}
+
+    </table>
+
+    <br>
+    <div style="margin-left: 140px">
+      <a style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:event_list' %}">Cancel</a>
+      <button type="submit" class="save btn btn-success">Sichern</button>
+  </div>
+  </form>
+
+{% endblock content %}

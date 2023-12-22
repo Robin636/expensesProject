@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}{% endblock title %}
+
+{% block content %}
+  <h4>Einstellungen</h4>
+  {% if submitted %}
+    <p class="success">Einstellungen abgespeichert!</p>
+  {% else %}
+
+    <form action="" method="post">{% csrf_token %}
+      <table>
+        {% for field in form %}
+          <tr height="40px">
+            <td>{{ field.label }}: </td>
+            <td>{{ field }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <br>
+      <div style="margin-left: 140px">
+        <a style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:index' %}">Cancel</a>
+        <button type="submit" class="save btn btn-success">Sichern</button>
+      </div>
+
+{#      <table style="margin-top: 30px" width="100%">#}
+{#        <tr>#}
+{#          <td width="50%"><a class="btn btn-secondary" href="{% url 'chapters:chap_detail' pk=chap.pk %}">Cancel</a></td>#}
+{#          <td width="50%"><button type="submit" value="Update" class="btn btn-success">Submit</button></td>#}
+{#        </tr>#}
+{#      </table>#}
+    {% csrf_token %}
+    </form>
+  {% endif %}
+{% endblock content %}

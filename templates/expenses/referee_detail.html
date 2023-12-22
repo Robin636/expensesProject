@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}{% endblock title %}
+
+{% block content %}
+  <h4>Einstellungen</h4>
+  {% if user.is_authenticated %}
+
+    <table>
+      <tr>{{ referee.firstname }}</tr>
+      <tr>{{ referee.lastname }}</tr>
+      <tr>{{ referee.street }}</tr>
+      <tr>{{ referee.houseno }}</tr>
+      <tr>{{ referee.pid }}</tr>
+      <tr>{{ referee.city }}</tr>
+      <tr>{{ referee.telefon }}</tr>
+      <tr>{{ referee.IBAN }}</tr>
+      <tr>{{ referee.BIC }}</tr>
+
+    </table>
+
+{#      <table style="margin-top: 30px" width="100%">#}
+{#        <tr>#}
+{#          <td width="50%"><a class="btn btn-secondary" href="{% url 'chapters:chap_detail' pk=chap.pk %}">Cancel</a></td>#}
+{#          <td width="50%"><button type="submit" value="Update" class="btn btn-success">Submit</button></td>#}
+{#        </tr>#}
+{#      </table>#}
+
+  {% endif %}
+{% endblock content %}

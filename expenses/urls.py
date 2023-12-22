@@ -14,8 +14,20 @@ urlpatterns = [
   # path('about/', views.about, name='about'),
 
   path('expenses/', views.EventListView.as_view(), name='event_list'),
-  path('dailytravel/new/', views.DailytravelListView.as_view(), name='dt_new'),
-  # path('<int:pk>/', views.ChapDetailView.as_view(), name='chap_detail'),
+  path('expenses/new/', views.EventCreateView.as_view(), name='event_new'),
+  path('<int:pk>/',views.EventDetailView.as_view(), name='event_detail'),
+  path('expenses/<int:pk>/', views.EventDetailView.as_view(), name='event_detail'),
+
+  path('expenses/<int:pk>/update/', views.EventUpdateView.as_view(), name='event_update'),
+  path('expenses/<int:pk>/delete/', views.EventDeleteView.as_view(), name='event_delete'),
+
+  path('referee/new/', views.RefereeCreateView.as_view(), name='referee_new' ),
+  # path('expenses/referee/', views.RefereeDetailView.as_view(), name='referee'),
+  # path('referee/update/', views.RefereeUpdateView.as_view(), name='referee'),
+  # path('expenses/referee/new/', views.refereesettings, name='referee')
+
+  # path('dailytravel/new/', views.DailytravelListView.as_view(), name='dt_new'),
+
   # path('chap/<int:pk>/update/', views.ChapUpdateView.as_view(), name='chap_update'),
   # path('chap/<int:pk>/remove/', views.ChapDeleteView.as_view(), name='chap_remove'),
   #
