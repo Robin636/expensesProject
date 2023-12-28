@@ -14,16 +14,22 @@ urlpatterns = [
   # path('about/', views.about, name='about'),
 
   path('expenses/', views.EventListView.as_view(), name='event_list'),
-  path('expenses/new/', views.EventCreateView.as_view(), name='event_new'),
-  path('<int:pk>/',views.EventDetailView.as_view(), name='event_detail'),
-  path('expenses/<int:pk>/', views.EventDetailView.as_view(), name='event_detail'),
+  path('events/new/', views.EventCreateView.as_view(), name='event_new'),
 
-  path('expenses/<int:pk>/update/', views.EventUpdateView.as_view(), name='event_update'),
-  path('expenses/<int:pk>/delete/', views.EventDeleteView.as_view(), name='event_delete'),
+  path('event/<int:pk>/',views.EventDetailView.as_view(), name='event_detail'),
+  #path('expenses/<int:pk>/', views.EventDetailView.as_view(), name='event_detail'),
 
-  path('referee/new/', views.RefereeCreateView.as_view(), name='referee_new' ),
-  # path('expenses/referee/', views.RefereeDetailView.as_view(), name='referee'),
-  # path('referee/update/', views.RefereeUpdateView.as_view(), name='referee'),
+  path('event/<int:pk>/update/', views.EventUpdateView.as_view(), name='event_update'),
+  path('event/<int:pk>/delete/', views.EventDeleteView.as_view(), name='event_delete'),
+
+  path('referee/settings', views.referee_settings, name='referee_settings'),
+  #path('referee/new/', views.referee_new, name='referee_new'),
+  path('referee/<int:pk>/update/', views.referee_update, name='referee_update'),
+
+  #path('referee/<int:pk>/create/', views.referee_create, name='referee_create' ),
+  # path('referee/create/', views.RefereeCreateView.as_view(), name='referee_create' ),
+  #path('referee/<int:pk>/update/', views.RefereeUpdateView.as_view(), name='referee_update'),
+
   # path('expenses/referee/new/', views.refereesettings, name='referee')
 
   # path('dailytravel/new/', views.DailytravelListView.as_view(), name='dt_new'),

@@ -22,6 +22,8 @@
 {#  <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">#}
   {#  <script src="https://use.fontawesome.com/ffda900719.js"></script>#}
 
+
+
   {# Custom CSS#}{#  <link rel="stylesheet" href="{% static '/css/chapters.css' %}">#}
   <link rel="stylesheet" href="{% static 'expenses.css' %}">
 
@@ -37,6 +39,8 @@
   <p></p>
     <h4>Bayerischer Golfverband e.V.</h4>
     <h7>Geschäftsstelle: Georg-Brauchle-Ring 93, 80992 München</h7>
+  
+    
 
     <div class="row nav">
 
@@ -48,7 +52,7 @@
         </li>
 
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="{% url 'expenses:event_new' %}"> + </a>
+          <a class="nav-link" href="{% url 'expenses:event_new' %}">{% include 'plus-square.svg' %} </a>
 {#        <a class="nav-link" href="{% url 'expenses:event_new' %}"><span class="far fa-plus-square"></span> </a>#}
         </li>
 
@@ -60,7 +64,7 @@
 
         <li class="nav-item col-sm-3">
 {#          <a class="nav-link" href="{% url 'expenses:referee/{{user.id}}' %}"><span class="far fa-cog"></span></a>#}
-          <a class="nav-link" href="{% url 'expenses:referee_new' %}">Einstellungen</a>
+          <a class="nav-link" href="{% url 'expenses:referee_settings' %}">Einstellungen</a>
 {#          <a class="nav-link" href="{% url 'expenses:referee_new' %}"><i class="far fa-cog"></i>Einstellungen</a>#}
         </li>
 
@@ -69,7 +73,8 @@
         </li>
 
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#">Willkommen: {{ user.username }}</a>
+          <a class="nav-link" href="#">Willkommen: {{ user.first_name}} {{ user.last_name}}</a>
+{#          <a class="nav-link" href="#">Willkommen: {{ user.username }}</a>#}
         </li>
 
       {% else %}
@@ -94,7 +99,8 @@
       </div>
     </div>
 
-
+  {%  include 'expenses/messages.html' %}
+  
   <!-- CONTENT BLOCK -->
   <div class="container">
 

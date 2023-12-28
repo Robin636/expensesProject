@@ -10,6 +10,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from django.views.generic import ListView, TemplateView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
@@ -85,40 +86,119 @@ class EventDeleteView(DeleteView):
   success_url = reverse_lazy('expenses:event_list')
 
 
-class RefereeCreateView(CreateView):
+
+def referee_settings(request):
+  author = request.user
+  referee_list = Referee.objects.filter(author=author)
+  if referee_list.count() > 0:
+    referee_instance = referee_list.first()
+    context = {
+      'referee': referee_instance,
+    }
+    return render(request, 'expenses/referee_detail.html', context)
+  else:
+    form = RefereeForm()
+    context = {
+      'form': form,
+      'author': request.user
+    }
+    return render(request, 'expenses/referee_form.html', context)
+
+
+def referee_update(request, pk):
+  referee = get_object_or_404(Referee, pk=pk)
+  if request.method == 'POST':
+    form = RefereeForm(request.POST, instance=referee)
+    if form.is_valid():
+      referee = form.save(commit=False)
+      referee.author = request.user
+      referee.id = 1
+      referee.save()
+      context = {
+        'referee': referee,
+      }
+      return render(request, 'expenses/referee_detail.html', context)
+    else:
+      if 'IBAN' in form.errors:
+        messages.error(request, 'IBAN nicht korrekt!')
+
+  else:
+    form=RefereeForm(instance=referee)
+  return render(request, 'expenses/referee_form.html', {'form': form})
+
+
+
+# def referee_new(request):
+#   author = request.user
+#   referee_list = Referee.objects.filter(author=author)
+#   if referee_list.count() > 0:
+#     referee_instance = referee_list.first()
+#     form = RefereeForm(request.POST or None, instance=referee_instance)
+#   else:
+#     form = RefereeForm()
+#
+#   if request.method == 'POST':
+#     if form.is_valid():
+#       form.instance.author = request.user
+#       ref_new = form.save(commit=False)
+#       ref_new.id = 1
+#       # allow only one setting
+#       ref_new.save()
+#
+#       return render(request, 'expenses/referee_detail.html')
+#
+#   else:
+#     author = request.user
+#     referee_list = Referee.objects.filter(author=author)
+#     if referee_list.count() > 0:
+#       referee_instance = referee_list.first()
+#       form = RefereeForm(request.POST or None, instance=referee_instance)
+#     else:
+#       form = RefereeForm()
+#
+#     context = {
+#       'form': form,
+#     }
+#     return render(request, 'expenses/referee_form.html')
+
+
+class RefereeCreateView(LoginRequiredMixin,CreateView):
   model = Referee
   form_class = RefereeForm
   template_name = "expenses/referee_form.html"
-  success_url = reverse_lazy('expenses:referee_detail')
+  success_url = reverse_lazy('expenses:referee_settings')
+
+
 
   def form_valid(self, form):
-    form.author = self.request.user.id
-
+    form.instance.author = self.request.user
     ref_new = form.save(commit=False)
+    ref_new.id = 1
+    # allow only one setting
     ref_new.save()
 
     return super(RefereeCreateView, self).form_valid(form)
 
 
-class RefereeDetailView(DetailView):
-  model = Referee
-  template_name = "expenses/referee_detail.html"
-  success_url = reverse_lazy('expenses:referee')
+# class RefereeDetailView(DetailView):
+#   model = Referee
+#   template_name = "expenses/referee_detail.html"
+  # success_url = reverse_lazy('expenses:referee')
 
 
-class RefereeUpdateView(LoginRequiredMixin, UpdateView):
-  model = Referee
-  form_class = RefereeForm
-  #template_name = 'expenses/referee_detail.html'
-  success_url = reverse_lazy('expenses:referee')
-
-
-  def form_valid(self, form):
-    referee_new = form.save(commit=False)
-    referee_new.id = 0
-    referee_new.save()
-
-    return super(RefereeUpdateView, self).form_valid(form)
+# class RefereeUpdateView(LoginRequiredMixin, UpdateView):
+#   model = Referee
+#   form_class = RefereeForm
+#   #template_name = 'expenses/referee_detail.html'
+#   success_url = reverse_lazy('expenses:referee')
+#
+#
+#   def form_valid(self, form):
+#     referee_new = form.save(commit=False)
+#     referee_new.id = 0
+#     referee_new.save()
+#
+#     return super(RefereeUpdateView, self).form_valid(form)
 
 
 # def __init__(self, *args, **kwargs):
@@ -126,7 +206,7 @@ class RefereeUpdateView(LoginRequiredMixin, UpdateView):
 #   self.fields['author'].widget.attrs['disabled'] = True
 
 
-pass
+
 
 
 class DailytravelListView(ListView):
