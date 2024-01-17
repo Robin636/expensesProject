@@ -33,8 +33,33 @@ table {
    margin-bottom: 20px;
 }
 
+#logout-form{
+    display: inline;
+}
+#logout-form button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    text-decoration: none;
+}
+
+button:hover{
+    /*color: dodgerblue;*/
+    color: #54b3d6;
+}
+
 .label {
-    width: 50px;
+    width: 40px;
+    text-align:left;
+}
+.label_r {
+    width: 40px;
+    text-align:left;
+}
+.label_l {
+    width: 25px;
     text-align:left;
 }
 

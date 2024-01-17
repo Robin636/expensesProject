@@ -53,13 +53,18 @@ MESSAGE_TAGS = {
  }
 
 INSTALLED_APPS = [
+    'expenses.apps.ExpensesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'expenses.apps.ExpensesConfig',
+    'jquery',
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
+    # 'crispy_forms',
+    # 'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -150,6 +155,19 @@ LOGIN_REDIRECT_URL = '/expenses/'
 LOGOUT_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 28800  # 8 hours in seconds
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# BOOTSTRAP_DATEPICKER_PLUS = {
+#     "options": {
+#         "locale": "de",
+#     },
+#     "variant_options": {
+#         "date": {
+#             "format": "DD.MM.YYYY",
+#         },
+#     }
+# }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

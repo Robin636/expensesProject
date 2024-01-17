@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.urls import reverse
+from django.utils import timezone
 from localflavor.generic.models import IBANField
 from localflavor.generic.countries.sepa import IBAN_SEPA_COUNTRIES
 
@@ -37,10 +38,10 @@ class Event(models.Model):
     referee = models.ForeignKey('expenses.Referee', on_delete=models.DO_NOTHING, related_name='events_referee')
     #author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    startdate = models.DateField()
-    enddate = models.DateField()
-    noofnights = models.IntegerField()
-    noofbreakfasts = models.IntegerField()
+    startdate = models.DateTimeField('date published', null=True)
+    enddate = models.DateTimeField('date published', null=True)
+    noofnights = models.IntegerField(default=0)
+    noofbreakfasts = models.IntegerField(default=0)
     status = models.BooleanField(default=False)  # sent = True
     game = models.ForeignKey('expenses.Game', on_delete=models.DO_NOTHING, related_name='events_game')
     club = models.ForeignKey('expenses.Club', on_delete=models.DO_NOTHING, related_name='events_club')
@@ -48,9 +49,8 @@ class Event(models.Model):
     class Meta:
         ordering = ['startdate']
 
-
     def get_absolute_url(self):
-        return reverse('expenses:referee', args=[str(self.id)])
+        return reverse('event_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
