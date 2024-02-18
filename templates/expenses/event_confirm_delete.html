@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Abrechnung löschen{% endblock title %}
+
+{% block content %}
+  
+  <div class="container">
+    <form method="post" class="card">
+		{% csrf_token %}
+		<h4>Abrechnung:</h4>
+		<p>"{{event}}" löschen?</p>
+      
+    <div style="margin-left: 400px">
+      <a style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:event_list' %}">Cancel</a>
+      <button type="submit" class="btn btn-danger">Löschen</button>
+    </div>
+      
+{#		<p class="form-buttons">#}
+{#			<input type="submit" class="btn btn-danger" value="Löschen">#}
+{#			<a href="{% url 'expenses:event_list' %}" class="btn btn-secondary">Cancel</a>#}
+{#		</p>#}
+	</form>
+  
+   
+{#    {% if event_list.count > 0 %}#}
+{#      {% for event in event_list %}#}
+{#        <table border="0">#}
+{#          <tr>#}
+{#            <td width="75%"><h6><a class="event-link" href="{% url 'expenses:event_detail' pk=event.pk %}">{{ event.name }}: {{ event.club }}</a> </h6></td>#}
+    {#        <td width="15%"><h5>({{ chap.pairs.count }}/{{ chap.sum1 }}/{{ chap.sum2 }})</h5></td>#}
+{#    #}
+{#            <td width="5%" align="right"><a  href="{% url 'expenses:event_update' pk=event.pk %}"><i aria-hidden class="fa fa-pencil"></i></a></td>#}
+{#            <td width="15%" align="right"><a  href="{% url 'expenses:event_delete' pk=event.pk %}"><i aria-hidden class="fa fa-trash-o" ></i></a></td>#}
+{#    #}
+{#          </tr>#}
+{#    #}
+{#        </table>#}
+{#      {% endfor %}#}
+{#    {% else %}#}
+{#      <p>Noch keine Abrechnungen erstellt!</p>#}
+{#    {% endif %}#}
+  
+  </div>
+
+{% endblock content %}
