@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+{#{% block title %}{{ event.days }}{% endblock title %}#}
+{% block title %}Tagegeldberechnung{% endblock title %}
+
+{% block content %}
+
+  <div class="container"> 
+    <table class="table-purpose">
+      <tr>
+        <td>Zweck der Reise: <span class="td-bold">{{ event.game }} im {{ event.club }} am {{ event.startdate|date:"d.m.y" }}</span></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <form action="" method="post">{% csrf_token %}
+
+    <div class="container text-left">
+      <div class="row">
+        <div class="col-4">Anzahl eintägiger Reisen</div>
+        <div class="col-1" onchange="CalcTagegeld()">{{ form.iNOfOneDayTravel }}</div>
+        <div class="col-4">Tagegeld eintägig (8 Std. und mehr)</div>
+        <div class="col-2" style="text-align: right" id="Tagegeld">{{ Tagegeld }} €</div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-4">An-/Abreisetage (bei Übernachtung)</div>
+        <div class="col-1" onchange="CalcAnAbTagegeld()">{{ form.iNOfMoreDaysTravel }}</div>
+        <div class="col-4">Tagegeld An-/Abreisetag</div>
+        <div class="col-2" style="text-align: right" id="AnAbTagegeld">{{ AnAbTagegeld }} €</div>
+      </div>
+      <div class="row">
+        <div class="col-4">Zwischentage bei mehrtägiger Reise</div>
+        <div class="col-1" onchange="CalcZwTagegeld()">{{ form.iNOfDaysBetween }}</div>
+        <div class="col-4">Tagegeld Zwischentag</div>
+        <div class="col-2" style="text-align: right" id="ZwTagegeld">{{ ZwTagegeld }} €</div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-4">Anzahl Reisetage (Aufwandsentschädigung)</div>
+        <div class="col-1" onchange="CalcAufwand()">{{ form.iNOfTravelDays }}</div>
+        <div class="col-4">Aufwandsentschädigung</div>
+        <div class="col-2" style="text-align: right" id="Aufwand">{{ Aufwand }} €</div>
+      </div>
+        <br>
+      <div class="row">
+        <div class="col-4">Anzahl der Übernachtungen</div>
+        <div class="col-1" onchange="CalcBreakfast()">{{ form.iNOfNights }}</div>
+        <div class="col-4">Abzug wg. Frühstück</div>
+        <div class="col-2" style="text-align: right" id="Breakfast">{{ Breakfast }} €</div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-5"></div>
+        <div class="col-4 td-bold">Tagegeld (gesamt)</div>
+        <div class="col-2" style="text-align: right" id="CostAll">{{ CostAll }} €</div>
+      </div>
+    </div>
+    <br>
+{#    <div class="container text-left">#}
+      <div class="row">
+        <div class="col-5">Anmerkungen Ihrerseits zur Reisekostenabrechnung</div>
+        <div class="col-7">{{ form.cComment }}</div>
+      </div>
+{#    </div>#}
+    <br>
+    <div style="margin-left: 780px">
+      <a style="margin-right: 40px" class="btn btn-secondary" href="{% url 'expenses:travel_list' pk=event.pk %}">Cancel</a>
+      <button type="submit"  class="save btn btn-success">Sichern</button>
+    </div>
+
+  </form>
+
+  <script type="text/javascript">
+    let dropdown;
+    let num;
+    let Tagegeld=document.getElementById("Tagegeld").innerText;
+    Tagegeld = Number(Tagegeld.slice(0, Tagegeld.length-3))
+    console.log(Tagegeld)
+    
+    let AnAbTagegeld=document.getElementById("AnAbTagegeld").innerText;
+    AnAbTagegeld = Number(AnAbTagegeld.slice(0, AnAbTagegeld.length-3))
+    
+    let ZwTagegeld=document.getElementById("ZwTagegeld").innerText;
+    ZwTagegeld = Number(ZwTagegeld.slice(0, ZwTagegeld.length-3))
+    
+    let Aufwand=document.getElementById("Aufwand").innerText;
+    Aufwand = Number(Aufwand.slice(0, Aufwand.length-3))
+    
+    let Breakfast=document.getElementById("Breakfast").innerText;
+    Breakfast = Number(Breakfast.slice(0, Breakfast.length-3))
+    
+    function CalcTagegeld() {
+      console.log('In CalcTagegeld at beginning');
+      dropdown = document.querySelector('#id_iNOfOneDayTravel');
+      console.log(dropdown);
+      num = dropdown.value;
+      console.log(num);
+      Tagegeld = (num * parseFloat({{ rates.dailyallowence }}, 10)).toFixed(2);
+      document.getElementById("Tagegeld").innerText = Tagegeld + " €"
+      CalcCostAll();
+    }
+    function CalcAnAbTagegeld() {
+      console.log('In CalcTG_AnAb at beginning');
+      dropdown = document.querySelector('#id_iNOfMoreDaysTravel');
+      num = dropdown.value;
+      AnAbTagegeld = (num * parseFloat({{ rates.dailyallowence }}, 10)).toFixed(2);
+      document.getElementById("AnAbTagegeld").innerText = AnAbTagegeld + " €"
+      CalcCostAll();
+    }
+    function CalcZwTagegeld() {
+      console.log('In CalcZwTage at beginning');
+      dropdown = document.querySelector('#id_iNOfDaysBetween');
+      num = dropdown.value;
+      ZwTagegeld = (num * parseFloat({{ rates.fulldayallowence }},10)).toFixed(2);
+      document.getElementById("ZwTagegeld").innerText = ZwTagegeld + " €"
+      CalcCostAll();
+    }
+    function CalcAufwand() {
+      console.log('In CalcAufwand at beginning');
+      let dropdown = document.querySelector('#id_iNOfTravelDays');
+      num = dropdown.value;
+      Aufwand = (num * parseFloat({{ rates.dailycompensation }}, 10)).toFixed(2);
+      document.getElementById("Aufwand").innerText = Aufwand + " €"
+      CalcCostAll();
+    }
+    function CalcBreakfast() {
+      console.log('In CalcBreakfast at beginning');
+      dropdown = document.querySelector('#id_iNOfNights');
+      num = dropdown.value;
+      Breakfast = (num * parseFloat({{ rates.bfreduction }}, 10)).toFixed(2);
+      document.getElementById("Breakfast").innerText = Breakfast + " €"
+      CalcCostAll();
+    }
+    function CalcCostAll() {
+      console.log('In CalcSum at beginning');
+      console.log(Number(Tagegeld));
+      console.log(Number(AnAbTagegeld));
+      console.log(ZwTagegeld);
+      console.log(Aufwand);
+      console.log(Breakfast);
+      CostAll =  (Number(Tagegeld) + Number(AnAbTagegeld) + Number(ZwTagegeld) + Number(Aufwand) + Number(Breakfast)).toFixed(2);
+      document.getElementById("CostAll").innerText = CostAll + " €"
+    }
+
+  </script>
+{% endblock content %}

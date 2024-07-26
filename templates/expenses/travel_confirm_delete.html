@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Abrechnung löschen{% endblock title %}
+{% block title %}Fahrt löschen{% endblock title %}
 
 {% block content %}
   
   <div class="container">
     <form method="post" class="card">
 		{% csrf_token %}
-		<h4>Abrechnung:</h4>
-		<p>"{{event}}" löschen?</p>
+		<h4>Fahrt:</h4>
+		<p>"{{travel}}" löschen?</p>
       
     <div style="margin-left: 400px">
-      <a style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:event_list' %}">Cancel</a>
+      <a style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:travel_list' pk=event.pk %}">Cancel</a>
       <button type="submit" class="btn btn-danger">Löschen</button>
     </div>
   

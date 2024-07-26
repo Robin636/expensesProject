@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Dateianhang{% endblock title %}
+
+{% block content %}
+  <h4>Upload von Dateien</h4>
+
+  <div style="padding:40px;margin:40px;border:1px solid #ccc">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <br>
+      <div style="margin-left: 810px">
+        <a  style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:travel_list' pk=event.pk %}">Cancel</a>
+        <button type="submit" class="save btn btn-success">Hochladen</button>
+      </div>
+      {% csrf_token %}
+    </form>
+    <hr>
+
+  </div>
+
+
+
+{% endblock content %}
