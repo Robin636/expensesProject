@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}{% endblock title %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <br><br>
+    <h6>Abgespeicherte Einstellungen für {{ user.first_name }}  {{ user.last_name }}:</h6>
+
+    <br>
+
+    <table>
+      <tr><td class="label_l">Vorname: </td><td class="label_r">{{ referee.firstname }}</td></tr>
+      <tr><td class="label">Nachname: </td><td>{{ referee.lastname }}</td></tr>
+      <tr><td class="label">Straße: </td><td>{{ referee.street }}</td></tr>
+      <tr><td class="label">E-Mail: </td><td>{{ referee.email }}</td></tr>
+      <tr><td class="label">Hausnummer: </td><td>{{ referee.houseno }}</td></tr>
+      <tr><td class="label">Postleitzahl: </td><td>{{ referee.pid }}</td></tr>
+      <tr><td class="label">Stadt: </td><td>{{ referee.city }}</td></tr>
+      <tr><td class="label">Telefonnummer: </td><td>{{ referee.telefon }}</td></tr>
+      <tr><td class="label">Mobil: </td><td>{{ referee.mobile }}</td></tr>
+      <tr><td class="label">IBAN: </td><td>{{ referee.IBAN }}</td></tr>
+      <tr><td class="label">BIC: </td><td>{{ referee.BIC }}</td></tr>
+      <tr><td class="label">Bankname: </td><td>{{ referee.nameBank }}</td></tr>
+
+    </table>
+    
+    <table style="margin-top: 30px">
+      <tr>
+        <td><a style="margin-left: 0px;" class="btn btn-secondary" href="{% url 'expenses:event_list' %}">Cancel</a></td>
+        <td><a style="margin-left: 150px;" class="btn btn-info" href="{% url 'expenses:referee_update' pk=referee.pk %}">Ändern</a></td>
+      </tr>
+    </table>
+
+  {% endif %}
+{% endblock content %}

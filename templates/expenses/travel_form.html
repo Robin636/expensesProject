@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+{% block title %}{{ event.club }}{% endblock title %}
+{#{% block title %}{{ user.username }}{% endblock title %}#}
+
+{% block content %}
+  
+  <div class="container"> 
+    <table class="table-purpose">
+      <tr>
+        <td>Zweck der Reise: <span class="td-bold">{{ event.game }} im {{ event.club }} am {{ event.startdate|date:"d.m.y" }}</span></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <form action="" method="post">{% csrf_token %}
+    
+    <div class="container text-left">
+      <div class="row">
+        <div class="col-3">Abfahrt am</div>
+        <div class="col-3">{{ form.traveldate }}</div>
+        <div class="col-3">Transportmittel</div>
+        <div class="col-3">{{ form.type }}</div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-3">von</div>
+        <div class="col-3">um</div>
+        <div class="col-3">Ankunft</div>
+        <div class="col-3">in/im</div>
+      </div>  
+      <div class="row">  
+        <div class="col-3">{{ form.startlocation }}</div>
+        <div class="col-3">{{ form.starttime }}</div>
+        <div class="col-3">{{ form.endtime }}</div>
+        <div class="col-3">{{ form.endlocation }}</div>
+      </div>
+      <br>
+      <div class="row">        
+        <div class="col-3">Zurückgelegte km</div>
+        <div class="col-3">Kommentar</div>
+        <div class="col-3"></div>
+        <div class="col-3"></div>
+      </div>
+      <div class="row"> 
+        <div class="col-3">{{ form.km }}</div>
+        <div class="col-3">{{ form.comment }}</div>
+        <div class="col-3"></div>
+        <div class="col-3"></div>
+      </div>
+    </div>
+  
+    <br>
+    <div style="margin-left: 810px">
+      <a  style="margin-right: 40px;" class="btn btn-secondary" href="{% url 'expenses:event_list' %}">Cancel</a>
+      <button type="submit" class="save btn btn-success">Sichern</button>
+    </div>
+
+  </form>
+
+{% endblock content %}
+

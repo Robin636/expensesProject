@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Abrechnungen{% endblock title %}
+
+{% block content %}
+ 
+  <div class="container">
+
+    {% if event_list.count > 0 %}
+      {% for event in event_list %}
+        <div class="row" style="text-align: left">
+          <div class="col-4"><a href="{% url 'expenses:travel_list' pk=event.pk %}">{{ event.name }}: {{ event.club }}</a></div>
+          <div class="col-1" style="text-align: right"><a href="{% url 'expenses:event_update' pk=event.pk %}"><i aria-hidden="true" class="fa fa-pencil"></i></a></div>
+          <div class="col-1" style="text-align: right"><a href="{% url 'expenses:event_delete' pk=event.pk %}"><i aria-hidden="true" class="fa fa-trash-o" ></i></a></div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Noch keine Abrechnungen erstellt!</p>
+    {% endif %}
+  
+  </div>
+
+{% endblock content %}

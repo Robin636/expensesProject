@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.name }}{% endblock title %}
+
+{% block content %}
+  
+  {% if event.referee.id %}
+    <div class="container">
+      <table class="table-referee">
+        <tr>
+          <td  class="td-bold">Adresse:</td>
+          <td>{{ referee.firstname }} {{ referee.lastname }}</td>
+          <td>{{ referee.street }}</td>
+          <td>{{ referee.pid }} {{ referee.city }}</td>
+          <td>{{ referee.email }}</td>
+        </tr>
+        
+        <tr>
+          <td class="td-bold">Telefon:</td>
+          <td>{{ referee.telefon }} </td>
+          <td class="td-bold">Mobil:</td>
+          <td>{{ referee.mobile }}</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td class="td-bold">Bank:</td>
+          <td>{{ referee.IBAN }}</td>
+          <td>{{ referee.BIC }} </td>
+          <td>{{ referee.nameBank }}</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <hr style="height:3px;">
+  {% endif %}  
+  
+
+  <div class="container">
+      
+    <table class="table-purpose">
+      <tr>
+        <td>Zweck der Reise: <span class="td-bold">{{ event.game }} im {{ event.club }}</span></td>
+{#          <td class="td-bold">{{ event.game }} im {{ event.club }}</td>#}
+      </tr>
+    </table>
+      
+  </div>
+  
+  {% if event.events_travel.count > 0 %}
+    <br>
+    <table>
+      <tr>
+        <td>Datum</td><td>Abfahrt</td><td>Datum</td><td>Ankunft</td><td>km</td><td>Std. je Tag</td><td>Kommentar</td>
+      </tr>
+    </table>
+    <br>
+    {% for travel in event.events_travel %}
+      <table>
+      <tr>
+        <td>{{ travel.traveldate }}</td>
+        <td>{{ travel.startlocation }}</td>
+        <td>{{ travel.starttime }}</td>
+        <td>{{ travel.endlocation }}</td>
+        <td>{{ travel.endtime }}</td>
+        <td>{{ travel.type }}</td>
+        <td>{{ travel.comment }}</td>
+      </tr>
+      </table>
+    {% endfor %}
+    <br>
+    <hr style="height:3px;">
+  {% endif %}
+  
+  <div class="container">
+    <br><br>
+    <table>
+    <tr>
+      <td>Reisen hinzufügen <a href="{% url 'expenses:add_travel' pk=event.pk %}">{% include 'plus-square.svg' %} </a></td>
+    </tr>
+    </table>
+  
+  </div>
+  
+  
+
+
+
+{% endblock content %}

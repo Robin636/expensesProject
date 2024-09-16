@@ -1,0 +1,238 @@
+{#{% block title %}Reiseabrechnung{% endblock title %}#}
+<!DOCTYPE html>
+<html lang="de">
+{#{% load static %}#}
+
+<head>
+  <meta charset="UTF-8">
+
+  <style>
+      .td-bold{
+        font-weight: bold;
+      }
+
+      .table_pdf {
+        {#border: 1px solid black;#}
+        width: 210mm;
+        {#height: 297mm;#}
+        border-collapse: separate;
+      }
+      .table_pdf tr{
+          width: 100%;
+      }
+      .table_pdf td{
+          /*width: 5%;*/
+          {#border: 1px solid black;#}
+      }
+
+      .col_5{
+          width: 5pt;
+      }
+      .col_30{
+          width: 30pt;
+      }
+      .col_35{
+          width: 35pt;
+      }
+      .col_60{
+          width: 60pt;
+      }
+      .col_120{
+          width: 120pt;
+      }
+      .col_180{
+          width: 180pt;
+      }
+  </style>
+
+</head>
+
+<body>
+
+<div style="font-weight: bold; font-size: 14px">Reiseabrechnung</div>
+<br>
+
+{% if event.referee.id %}
+  <div class="container text-left">
+    <table class="table-referee">
+      <tr>
+        <td class="col_60" style="font-weight: bold">Adresse:</td>
+        <td class="col_120">{{ referee.firstname }} {{ referee.lastname }}</td>
+        <td class="col_120">{{ referee.street }}</td>
+        <td class="col_120">{{ referee.pid }} {{ referee.city }}</td>
+        <td class="col_120" style="text-align: right">{{ referee.email }}</td>
+      </tr>
+      
+      <tr>
+        <td class="col_60" style="font-weight: bold">Telefon:</td>
+        <td class="col_120">{{ referee.telefon }} </td>
+        <td class="col_120" style="font-weight: bold">Mobil:</td>
+        <td class="col_120">{{ referee.mobile }}</td>
+        <td class="col_120"></td>
+      </tr>
+      
+      <tr>
+        <td class="col_60" style="font-weight: bold">Bank:</td>
+        <td class="col_120">{{ referee.IBAN }}</td>
+        <td class="col_120">{{ referee.BIC }}</td>
+        <td class="col_120">{{ referee.nameBank }}</td>
+        <td class="col_120"></td>
+      </tr>
+    </table>
+  </div>
+  <hr style="height:3px;">
+{% endif %}  
+<br>
+
+{#<div class="container">#}
+<div class="row" style="font-weight: bold; font-size: 14px">
+  Reise: {{ event.game }} im {{ event.club }} am {{ event.startdate|date:"d.m.y" }}
+</div>
+{#</div>#}
+<br>
+
+<div class="container text-left">
+  {% if travel_list.count > 0 %}
+
+    <table class="table_pdf">
+      <tr class="td-bold">
+        <td class="col_35">Abfahrt</td>
+        <td class="col_30"></td>
+        <td class="col_120"></td>
+        <td class="col_30">Ankunft</td>
+        <td class="col_120"></td>
+        <td class="col_30"></td>
+        <td class="col_30" style="text-align: right">km</td>
+        <td class="col_5"></td>
+        <td class="col_35" style="text-align: right">Std./Tag</td>
+        <td class="col_5"></td>
+        <td class="col_120">Kommentar</td>
+      </tr>
+  
+      {% for travel in travel_list %}
+        <tr>
+          <td class="col_35">{{ travel.traveldate|date:"d.m.y" }}</td>
+          <td class="col_30">{{ travel.starttime|time:"H:i" }}</td>
+          <td class="col_120">{{ travel.startlocation }}</td>
+          <td class="col_30">{{ travel.endtime|time:"H:i" }}</td>
+          <td class="col_120">{{ travel.endlocation }}</td>
+          <td class="col_30">{{ travel.type }}</td>
+          <td class="col_30" style="text-align: right">{{ travel.km }}</td>
+          <td class="col_5"></td>
+          <td class="col_35" style="text-align: right">{{ travel.duration }}</td>
+          <td class="col_5"></td>
+          <td class="col_120">{{ travel.comment }}</td>
+        </tr>
+      {% endfor %}  
+    </table>
+  
+    <hr style="height:1px;">
+    
+    <table class="table_pdf">
+      <tr>
+          <td class="col_180">Gefahrene km: {{ gefkm }}</td>
+          <td class="col_30"></td>
+          <td class="col_180" style="font-weight: bold">Kilometergeld</td>
+          <td class="col_30" style="text-align: right">{{ Kilometergeld }} €</td>
+      </tr>
+    </table>
+  
+    {% if icount > 0 %}
+      
+      <table class="table_pdf">
+        <tr><td class="col_180"></td></tr>
+        <tr style="font-weight: bold">
+          <td>Tagegeldberechnung</td>
+        </tr>
+        
+        
+        {% for days in  days_list %}
+          <tr>
+            <td class="col_180">Anzahl eintägiger Reisen</td>
+            <td class="col_30">{{ days.iNOfOneDayTravel }}</td>
+            <td class="col_180">Tagegeld eintägig (8 Std. und mehr)</td>
+            <td class="col_30" style="text-align: right" id="Tagegeld">{{ Tagegeld }} €</td>
+          </tr>
+          <tr>
+            <td class="col_180">An-/Abreisetage (bei Übernachtung)</td>
+            <td class="col_30">{{ days.iNOfMoreDaysTravel }}</td>
+            <td class="col_180">Tagegeld An-/Abreisetag</td>
+            <td class="col_30" style="text-align: right" id="AnAbTagegeld">{{ AnAbTagegeld }} €</td>
+          </tr>
+          <tr>
+            <td class="col_180">Zwischentage bei mehrtägiger Reise</td>
+            <td class="col_30">{{ days.iNOfDaysBetween }}</td>
+            <td class="col_180">Tagegeld Zwischentag</td>
+            <td class="col_30" style="text-align: right" id="ZwTagegeld">{{ ZwTagegeld }} €</td>
+          </tr>
+          <tr>
+            <td class="col_180">Anzahl Reisetage (Aufwandsentschädigung)</td>
+            <td class="col_30">{{ days.iNOfTravelDays }}</td>
+            <td class="col_180">Aufwandsentschädigung</td>
+            <td class="col_30" style="text-align: right" id="Aufwand">{{ Aufwand }} €</td>
+          </tr>
+          <tr>
+            <td class="col_180">Anzahl der Übernachtungen</td>
+            <td class="col_30">{{ days.iNOfNights }}</td>
+            <td class="col_180">Abzug wg. Frühstück</td>
+            <td class="col_30" style="text-align: right" id="Breakfast">{{ Breakfast }} €</td>
+          </tr>
+          
+        {% endfor %}
+      </table>
+      
+      <hr style="height: 1px;">
+      
+      <table class="table_pdf">
+        <tr>
+          <td class="col_180"></td>
+          <td class="col_30"></td>
+          <td class="col_180" style="font-weight: bold">Tagegeld</td>
+          <td class="col_30" style="text-align: right" id="CostAll">{{ CostAll }} €</td>
+        </tr>
+        <tr></tr>
+        <tr>
+          <td class="col_180"></td>
+          <td class="col_30"></td>
+          <td class="col_180" style="font-weight: bold">Erstattungsbetrag (gesamt)</td>
+          <td class="col_30" style="font-weight: bold; text-align: right">{{ Erstattungsbetrag }} €</td>
+        </tr>
+      </table>    
+  
+      {% for days in  days_list %}
+        {% if days.cComment %}
+          <table class="table_pdf">
+            <tr>
+              <td class="col_180" style="font-weight: bold">Anmerkungen Ihrerseits zur Reisekostenabrechnung:</td>
+            </tr>
+            <tr>
+              <td class="col_180">{{ days.cComment }}</td>
+              <td class="col_30"></td>
+              <td class="col_180"></td>
+              <td class="col_30"></td>
+            </tr>
+          </table>
+        {% endif %}
+      {% endfor %}
+  
+    {% endif %}
+  
+    {% if file_list.count > 0 %}
+      <br>
+      <table class="table_pdf">
+        <tr>
+          <td class="col_180" style="font-weight: bold">Dateianhänge:</td>
+        </tr>
+        {%  for files in file_list %}
+          <tr>
+            <td class="col_180">{{ files.file_name }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+    
+  {% endif %}
+</div>  
+  
+</body>
+</html>

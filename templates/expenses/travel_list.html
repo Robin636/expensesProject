@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}Reiseabrechnung{% endblock title %}
+
+{% block content %}
+{#{% if event.referee.id %}#}
+{#    <div class="container">#}
+{#      <table class="table-referee">#}
+{#        <tr>#}
+{#          <td class="td-bold">Adresse:</td>#}
+{#        <td>{{ referee.firstname }} {{ referee.lastname }}</td>#}
+{#        <td>{{ referee.street }}</td>#}
+{#        <td>{{ referee.pid }} {{ referee.city }}</td>#}
+{#        <td style="text-align: right">{{ referee.email }}</td>#}
+{#        </tr>#}
+{#        #}
+{#        <tr>#}
+{#          <td class="td-bold">Telefon:</td>#}
+{#        <td>{{ referee.telefon }} </td>#}
+{#        <td class="td-bold">Mobil:</td>#}
+{#        <td>{{ referee.mobile }}</td>#}
+{#        <td></td>#}
+{#        </tr>#}
+{#        #}
+{#        <tr>#}
+{#          <td class="td-bold">Bank:</td>#}
+{#        <td>{{ referee.IBAN }}</td>#}
+{#        <td>{{ referee.BIC }}</td>#}
+{#        <td>{{ referee.nameBank }}</td>#}
+{#        <td></td>#}
+{#        </tr>#}
+{#      </table>#}
+{#    </div>#}
+{#    <hr style="height:3px;">#}
+{#{% endif %}  #}
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-10 td-bold">
+      Reise: {{ event.game }} im {{ event.club }} am {{ event.startdate|date:"d.m.y" }}
+    </div>
+    <div class="col-2" style="text-align: right">
+      Fahrt hinzufügen <a href="{% url 'expenses:travel_add' pk=event.pk %}">{% include 'plus-square.svg' %} </a>
+    </div>
+  </div>
+</div>
+      
+{% if travel_list.count > 0 %}
+  <br>
+  <div class="container text-left">
+
+      <div class="row text-left td-bold">
+        <div class="col-1">Abfahrt</div>
+        <div class="col-1"></div>
+        <div class="col-2"></div>
+        <div class="col-1">Ankunft</div>
+        <div class="col-2"></div>
+        <div class="col-1"></div>
+        <div class="col-1">km</div>
+        <div class="col-1">Std. je Tag</div>
+        <div class="col-1">Kommentar</div>
+        <div class="col-1"></div>
+        <div class="col-1"></div>
+      </div>
+
+  </div>
+{#  <br>#}
+  <div class="container text-left">
+
+    {% for travel in travel_list %}
+      <div class="row">
+        <div class="col-1">{{ travel.traveldate|date:"d.m.y" }}</div>
+        <div class="col-1">{{ travel.starttime|time:"H:i" }}</div>
+        <div class="col-2">{{ travel.startlocation }}</div>
+        <div class="col-1">{{ travel.endtime|time:"H:i" }}</div>
+        <div class="col-2">{{ travel.endlocation }}</div>
+        <div class="col-1">{{ travel.type }}</div>
+        <div class="col-1">{{ travel.km }}</div>
+        <div class="col-1">{{ travel.duration }}</div>
+        <div class="col-1">{{ travel.comment }}</div>
+        <div class="col text-right"><a  href="{% url 'expenses:travel_update' pk=event.pk id=travel.id %}"><i aria-hidden="true" class="fa fa-pencil"></i></a></div>
+        <div class="col text-right"><a  href="{% url 'expenses:travel_delete' pk=event.pk id=travel.id %}"><i aria-hidden="true" class="fa fa-trash-o" ></i></a></div>
+      </div>
+    {% endfor %}
+
+  </div>
+  <br>
+  <hr style="height:1px;">
+  
+  <div class="container text-left">
+    <div class="row">
+      <div class="col-4">Gefahrene km</div>
+      <div class="col-1">{{ gefkm }} km</div>
+      <div class="col-4 td-bold">Kilometergeld</div>
+      <div class="col-2" style="text-align: right">{{ Kilometergeld }} €</div>
+    </div>
+  </div>
+        
+  {% if icount > 0 %}
+    <br>
+    <div class="container text-left">
+      <div class="row">
+        <div class="col-10 td-bold">Tagegeldberechnung</div>
+        <div class="col-2" style="text-align: right">
+            Tage ändern <a href="{% url 'expenses:days_update' pk=event.pk %}"><i aria-hidden="true" class="fa fa-pencil"></i></a>
+        </div>
+      </div>
+      <br>
+      {% for days in  days_list %}
+        <div class="row">
+          <div class="col-4">Anzahl eintägiger Reisen</div>
+          <div class="col-1">{{ days.iNOfOneDayTravel }}</div>
+          <div class="col-4">Tagegeld eintägig (8 Std. und mehr)</div>
+          <div class="col-2" style="text-align: right" id="Tagegeld">{{ Tagegeld }} €</div>
+        </div>
+        <div class="row">
+          <div class="col-4">An-/Abreisetage (bei Übernachtung)</div>
+          <div class="col-1">{{ days.iNOfMoreDaysTravel }}</div>
+          <div class="col-4">Tagegeld An-/Abreisetag</div>
+          <div class="col-2" style="text-align: right" id="AnAbTagegeld">{{ AnAbTagegeld }} €</div>
+        </div>
+        <div class="row">
+          <div class="col-4">Zwischentage bei mehrtägiger Reise</div>
+          <div class="col-1">{{ days.iNOfDaysBetween }}</div>
+          <div class="col-4">Tagegeld Zwischentag</div>
+          <div class="col-2" style="text-align: right" id="ZwTagegeld">{{ ZwTagegeld }} €</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-4">Anzahl Reisetage (Aufwandsentschädigung)</div>
+          <div class="col-1">{{ days.iNOfTravelDays }}</div>
+          <div class="col-4">Aufwandsentschädigung</div>
+          <div class="col-2" style="text-align: right" id="Aufwand">{{ Aufwand }} €</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-4">Anzahl der Übernachtungen</div>
+          <div class="col-1">{{ days.iNOfNights }}</div>
+          <div class="col-4">Abzug wg. Frühstück</div>
+          <div class="col-2" style="text-align: right" id="Breakfast">{{ Breakfast }} €</div>
+        </div>
+        <hr style="height: 1px;">
+        
+        <div class="row">
+          {% if days.cComment %}
+            <div class="col-4 td-bold">Anmerkungen Ihrerseits zur Reisekostenabrechnung:</div>
+          {% else %}
+            <div class="col-4"></div>
+          {% endif %}
+          <div class="col-1"></div>
+          <div class="col-4 td-bold">Tagegeld</div>
+          <div class="col-2" style="text-align: right" id="CostAll">{{ CostAll }} €</div>
+        </div>
+        <div class="row">
+          <div class="col-4">{{ days.cComment }}</div>
+        </div>
+        <br>
+        <div class="row">
+        <div class="col-5"></div>
+        <div class="col-4 td-bold">Erstattungsbetrag (gesamt)</div>
+          <div class="col-2" style="font-weight: bold; text-align: right">{{ Erstattungsbetrag }} €</div>
+        </div>
+        <br>
+        
+        <div class="row">
+          <div class="col-4">
+            <a href="{% url 'expenses:upload_file' pk=event.pk %}">Dateien anhängen</a>
+          </div>
+          <div class="col-1"></div>
+          <div class="col-4">
+            <a href="{% url 'expenses:event_genPDF' pk=event.pk %}">Reiseabrechnung ansehen </a>
+          </div>
+        </div>
+        
+        <br>
+        {% if file_list.count > 0 %}
+          <div class="row">
+            <div class="col-4">Bereits angehängte Dateien:</div>
+          </div>
+          {%  for files in file_list %}
+            <div class="row">
+              <div class="col-4"><a href="{{ MEDIA_URL }}{{ files.file }}">{{ files.file_name }}</a></div>
+              <div class="col-1">
+                <a href="{% url 'expenses:delete_file' pk=event.pk id=files.id %}"><i aria-hidden="true" class="fa fa-trash-o" ></i></a>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <br>
+        
+        <div class="row">
+          <div class="col-4">
+            <a href="{% url 'expenses:event_send' pk=event.pk %}">Abrechnung übermitteln</a>
+          </div>
+{#          <div class="col-5"></div>#}
+{#          <div class="col-4"></div>#}
+        </div>
+        
+        
+      {% endfor %}
+ 
+  {% else %} 
+    <div class="col-12" style="text-align: right">
+      Tage hinzufügen <a href="{% url 'expenses:days_add' pk=event.pk %}">{% include 'plus-square.svg' %} </a>
+    </div>
+ {% endif %}
+  
+{% endif %}
+<br><br>  
+
+{% endblock content %}
