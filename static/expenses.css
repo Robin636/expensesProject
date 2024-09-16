@@ -1,0 +1,151 @@
+body {
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+.nav-link {
+    color: black;
+}
+
+.nav {
+    height: 90px;
+    padding-top: 20px;
+    vertical-align: center;
+    background-color: #f4f4f4;
+    margin: 30px 0;
+}
+
+.nav-brand {
+    font-weight: bold;
+    font-size: larger;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+}
+
+.btn {
+    width: 100px;
+}
+
+.form-check-inline {
+   margin-bottom: 20px;
+}
+
+#logout-form{
+    display: inline;
+}
+#logout-form button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    text-decoration: none;
+}
+
+button:hover{
+    /*color: dodgerblue;*/
+    color: #54b3d6;
+}
+
+.label {
+    width: 40px;
+    text-align:left;
+}
+.label_r {
+    width: 40px;
+    text-align:left;
+}
+.label_l {
+    width: 25px;
+    text-align:left;
+}
+
+a {
+    font-weight: lighter;
+}
+
+.event-link {
+    color: dodgerblue;
+    text-underline: none;
+}
+
+input, textarea {
+    background-color: #f4f4f4;
+    border-radius: 4px;
+}
+
+.table-referee{
+        width: 100%;
+        font-size: smaller;
+    }
+    .table-referee tr{
+        line-height: 18px;
+    }
+    .table-referee td{
+        width: 20%;
+    }
+
+
+.table-purpose{
+    width: 80%;
+    /*font-size: smaller;*/
+}
+    .table-purpose tr{
+        line-height: 18px;
+    }
+    .table-purpose td{
+        width: 30%;
+    }
+
+.td-bold{
+    font-weight: bold;
+}
+
+
+
+
+.table-travel{
+    width: 100%;
+    text-align: left;
+    /*border-style: solid;*/
+    /*color: red;*/
+    /*font-size: smaller;*/
+}
+    .table-travel tr{
+        line-height: 30px;
+        width: 100%;
+    }
+    .table-travel td{
+        width: 300px;
+        height: 24px;
+        border-right: 1px solid crimson;
+    }
+
+.td-bold{
+    font-weight: bold;
+}
+
+.td_15{
+    width: 15px;
+}
+
+.td_200{
+    width: 200px;
+}
+
+.td_25{
+    width: 25px;
+}
+.td_30{
+    width: 30px;
+}
+
+.td_80Pznt{
+    width: 80%;
+}
+
+.td_20Pznt{
+    width: 20%;
+}
+
+
+
